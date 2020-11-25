@@ -59,7 +59,7 @@ jobs:
 
       - if: ${{ !contains(matrix.host_os, 'windows') }}
         run: |
-          RING_COVERAGE=1 mk/cargo.sh test -vv --target=${{ matrix.target }} ${{ matrix.cargo_options }} ${{ matrix.features }} ${{ matrix.mode }}
+          RING_COVERAGE=1 mk/cargo.sh +nightly test -vv --target=${{ matrix.target }} ${{ matrix.cargo_options }} ${{ matrix.features }} ${{ matrix.mode }}
 
       - id: grcov
         uses: actions-rs/grcov@v0.1
