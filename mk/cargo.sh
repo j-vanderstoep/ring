@@ -99,16 +99,6 @@ case $target in
 esac
 
 if [ -n "${RING_COVERAGE-}" ]; then
-  # XXX: Collides between release and debug.
-  coverage_dir=$PWD/target/$target/debug/coverage
-  mkdir -p "$coverage_dir"
-  rm -f "$coverage_dir/*.profraw"
-
-  export RING_BUILD_EXECUTABLE_LIST="$coverage_dir/executables"
-  truncate --size=0 "$RING_BUILD_EXECUTABLE_LIST"
-
-  export LLVM_PROFILE_FILE="$coverage_dir/%m.profraw"
-
   coverage_rustflags="-Zprofile \
     -Ccodegen-units=1 \
     -Cinline-threshold=0 \
