@@ -16,6 +16,9 @@ jobs:
 
         # TODO: targets
         target:
+          - aarch64-unknown-linux-musl
+          - armv7-unknown-linux-musleabihf
+          - i686-unknown-linux-musl
           - x86_64-unknown-linux-musl
 
         mode:
@@ -27,6 +30,15 @@ jobs:
 
         # TODO: targets
         include:
+          - target: aarch64-unknown-linux-musl
+            host_os: ubuntu-18.04
+
+          - target: armv7-unknown-linux-musleabihf
+            host_os: ubuntu-18.04
+
+          - target: i686-unknown-linux-musl
+            host_os: ubuntu-18.04
+
           - target: x86_64-unknown-linux-musl
             host_os: ubuntu-18.04
 
