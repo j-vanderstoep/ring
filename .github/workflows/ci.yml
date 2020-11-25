@@ -300,8 +300,13 @@ jobs:
         run: |
           mk/cargo.sh test -vv --target=${{ matrix.target }} ${{ matrix.cargo_options }} ${{ matrix.features }} ${{ matrix.mode }}
 
+      - id: grcov
+        uses: actions-rs/grcov@v0.1
+        with:
+          config: mk/grcov.mk
+
       - uses: codecov/codecov-action@v1
         with:
-          file: ./target/${{ matrix.target }}/debug/coverage/coverage.txt
+          file: ${{ steps.grcov.outputs.report }}
           fail_ci_if_error: true
           verbose: true

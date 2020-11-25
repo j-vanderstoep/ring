@@ -109,21 +109,28 @@ if [ -n "${RING_COVERAGE-}" ]; then
 
   export LLVM_PROFILE_FILE="$coverage_dir/%m.profraw"
 
+  coverage_rustflags="-Zprofile \
+    -Ccodegen-units=1 \
+    -Cinline-threshold=0 \
+    -Clink-dead-code \
+    -Coverflow-checks=off \
+    -Cpanic=abort \
+    -Zpanic_abort_tests"
+
   # ${target} with hyphens replaced by underscores, lowercase and uppercase.
   target_lower=${target//-/_}
   target_upper=${target_lower^^}
+
   runner_var=CARGO_TARGET_${target_upper}_RUNNER
   declare -x "${runner_var}=mk/runner ${!runner_var-}"
 
   rustflags_var=CARGO_TARGET_${target_upper}_RUSTFLAGS
-  declare -x "${rustflags_var}=-Zinstrument-coverage ${!rustflags_var-}"
+  declare -x "${rustflags_var}=$coverage_rustflags ${!rustflags_var-}"
+
+  rustdocflags_var=CARGO_TARGET_${target_upper}_RUSTDOCFLAGS
+  declare -x "${rustdocflags_var}=$coverage_rustflags ${!rustdocflags_var-}"
+
+  export CARGO_INCREMENTAL=0
 fi
 
 cargo "$@"
-
-if [ -n "$RING_COVERAGE" ]; then
-  llvm-profdata-10 merge -sparse "$coverage_dir"/*.profraw -o "$coverage_dir/merged.profdata"
-  xargs --arg-file="$RING_BUILD_EXECUTABLE_LIST" \
-    llvm-cov-10 show -instr-profile="$coverage_dir/merged.profdata" \
-    > "$coverage_dir"/coverage.txt
-fi
