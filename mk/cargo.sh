@@ -111,9 +111,6 @@ if [ -n "${RING_COVERAGE-}" ]; then
   target_lower=${target//-/_}
   target_upper=${target_lower^^}
 
-  runner_var=CARGO_TARGET_${target_upper}_RUNNER
-  declare -x "${runner_var}=mk/runner ${!runner_var-}"
-
   rustflags_var=CARGO_TARGET_${target_upper}_RUSTFLAGS
   declare -x "${rustflags_var}=$coverage_rustflags ${!rustflags_var-}"
 
