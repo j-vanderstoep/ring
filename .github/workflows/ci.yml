@@ -46,10 +46,8 @@ jobs:
         run: echo "DEVELOPER_DIR=/Applications/Xcode_12.2.app/Contents/Developer" >> $GITHUB_ENV
 
       - if: ${{ !contains(matrix.host_os, 'windows') }}
-        env:
-          RING_COVERAGE: 1
         run: |
-          mk/cargo.sh test -vv --target=${{ matrix.target }} ${{ matrix.cargo_options }} ${{ matrix.features }} ${{ matrix.mode }}
+          RING_COVERAGE=1 mk/cargo.sh test -vv --target=${{ matrix.target }} ${{ matrix.cargo_options }} ${{ matrix.features }} ${{ matrix.mode }}
 
       - id: grcov
         uses: actions-rs/grcov@v0.1
